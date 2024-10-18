@@ -80,11 +80,11 @@ public class PlayerController : MonoBehaviour
         // 角色移动
         rb.MovePosition(rb.position + movement * (moveSpeed * Time.fixedDeltaTime));
 
-        // 角色朝向鼠标位置
-        Vector2 lookDir = mousePos - rb.position;
+        // 只让枪口朝向鼠标位置
+        Vector2 lookDir = mousePos - (Vector2)gunPoint.position;
         float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
-        rb.rotation = angle;
-        
+        gunPoint.rotation = Quaternion.Euler(0f, 0f, angle);
+
         // 获取相机的目标位置（玩家位置 + 偏移）
         Vector3 desiredPosition = transform.position + cameraOffset;
 
