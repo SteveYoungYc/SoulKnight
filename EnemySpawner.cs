@@ -1,17 +1,17 @@
-﻿using System.Collections.Generic; // 用于使用 List
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public GameObject enemyPrefab; // 敌人的预制体
-    public float spawnInterval = 2f; // 生成间隔时间
-    public int maxEnemies = 10;      // 最大敌人数
-    public List<GameObject> enemies; // 用于记录生成的敌人
+    public GameObject enemyPrefab;
+    public float spawnInterval = 2f;
+    public int maxEnemies = 10;
+    public List<GameObject> enemies;
     public int generated;
 
     private void Start()
     {
-        enemies = new List<GameObject>(); // 初始化敌人列表
+        enemies = new List<GameObject>();
     }
 
     public void Init()
@@ -21,22 +21,18 @@ public class EnemySpawner : MonoBehaviour
 
     public void SpawnEnemy()
     {
-        Debug.Log("SpawnEnemy");
-        Vector2 spawnPosition = new Vector2(10f, Random.Range(-3f, 3f)); // 随机生成位置
-        GameObject newEnemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity); // 实例化敌人
-        enemies.Add(newEnemy); // 添加敌人到列表中
+        Vector2 spawnPosition = new Vector2(10f, Random.Range(-3f, 3f));
+        GameObject newEnemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+        enemies.Add(newEnemy);
         generated++;
-
-        // 注册敌人销毁事件，以便从列表中移除
         newEnemy.GetComponent<Enemy>().OnEnemyDestroyed += () => HandleEnemyDestroyed(newEnemy);
     }
-
-    // 当敌人被销毁时调用的处理函数
+    
     private void HandleEnemyDestroyed(GameObject enemy)
     {
         if (enemies.Contains(enemy))
         {
-            enemies.Remove(enemy); // 从列表中移除被销毁的敌人
+            enemies.Remove(enemy);
         }
     }
 }

@@ -33,22 +33,19 @@ public class PlayerController : MonoBehaviour
         otherWeaponRot = Quaternion.Euler(0f, 0f, -35f);
         currentWeaponIndex = 0;
 
-        // 创建两把武器并添加到玩家身上
         weapons = new Weapon[2];
-        CreateWeapon(0, mainWeaponPoint);  // 生成第一把武器，靠右放置
-        CreateWeapon(1, otherWeaponPoint); // 生成第二把武器，靠左放置
+        CreateWeapon(0, mainWeaponPoint);
+        CreateWeapon(1, otherWeaponPoint);
 
-        EquipWeapon(currentWeaponIndex); // 开局装备第一把武器
+        EquipWeapon(currentWeaponIndex);
     }
 
     void Update()
     {
-        // 处理WASD输入
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
         mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
 
-        // 处理射击
         if (Input.GetMouseButtonDown(0) && !isShooting)
         {
             StartShooting();
@@ -59,10 +56,7 @@ public class PlayerController : MonoBehaviour
             StopShooting();
         }
 
-        // 处理武器切换
         HandleWeaponSwitch();
-
-        // 调用缩放函数，处理鼠标滚轮输入
         HandleZoom();
     }
 
@@ -83,7 +77,6 @@ public class PlayerController : MonoBehaviour
         weapons[currentWeaponIndex].Shoot();
     }
 
-    // 创建武器，并将其附加到玩家身上
     private void CreateWeapon(int index, Vector3 localPosition)
     {
         GameObject weaponObj = Instantiate(weaponPrefab, transform);
@@ -95,7 +88,6 @@ public class PlayerController : MonoBehaviour
         weapons[index] = weaponObj.GetComponent<Weapon>();
     }
 
-// 使用 Coroutine 来平滑移动武器
     private IEnumerator MoveWeapon(Weapon weapon, Vector3 targetPosition, Quaternion targetRotation, float duration)
     {
         Vector3 initialPosition = weapon.transform.localPosition;
@@ -116,19 +108,16 @@ public class PlayerController : MonoBehaviour
 
     private void EquipWeapon(int weaponIndex)
     {
-        // 禁用所有武器
         foreach (Weapon weapon in weapons)
         {
-            StartCoroutine(MoveWeapon(weapon, otherWeaponPoint, otherWeaponRot, 0.3f)); // 平滑移动到备用位置
+            StartCoroutine(MoveWeapon(weapon, otherWeaponPoint, otherWeaponRot, 0.3f));
         }
 
-        // 将当前武器移动到主武器位置
-        StartCoroutine(MoveWeapon(weapons[weaponIndex], mainWeaponPoint, Quaternion.identity, 0.3f)); // 平滑移动到主武器位置
+        StartCoroutine(MoveWeapon(weapons[weaponIndex], mainWeaponPoint, Quaternion.identity, 0.3f));
     }
 
     private void HandleWeaponSwitch()
     {
-        // 使用数字键1、2切换武器
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             currentWeaponIndex = 0;
@@ -143,15 +132,12 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        // 角色移动
         rb.MovePosition(rb.position + movement * (moveSpeed * Time.fixedDeltaTime));
 
-        // 让当前武器的枪口朝向鼠标位置
         Vector2 lookDir = mousePos - (Vector2)weapons[currentWeaponIndex].transform.position;
         float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
         weapons[currentWeaponIndex].transform.rotation = Quaternion.Euler(0f, 0f, angle);
 
-        // 相机跟随
         Vector3 desiredPosition = transform.position + cameraOffset;
         Vector3 smoothedPosition = Vector3.SmoothDamp(cam.transform.position, desiredPosition, ref velocity, smoothSpeed);
         cam.transform.position = smoothedPosition;
