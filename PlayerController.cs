@@ -3,13 +3,13 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float moveSpeed = 10f;       
-    public Camera cam;                  
-    public Vector3 cameraOffset;        
-    public float smoothSpeed = 0.125f;  
-    public float zoomSpeed = 2f;        
-    public float minZoom = 5f;          
-    public float maxZoom = 20f;         
+    public float moveSpeed = 10f;
+    public Camera cam;
+    public Vector3 cameraOffset;
+    public float smoothSpeed = 0.125f;
+    public float zoomSpeed = 2f;
+    public float minZoom = 5f;
+    public float maxZoom = 20f;
 
     private Rigidbody2D rb;
     private Vector2 movement;
@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 otherWeaponPoint;
     private Quaternion otherWeaponRot;
 
-    private bool isShooting = false;   
+    private bool isShooting = false;
 
     void Start()
     {
@@ -34,8 +34,8 @@ public class PlayerController : MonoBehaviour
         currentWeaponIndex = 0;
 
         weapons = new Weapon[2];
-        CreateWeapon(0, mainWeaponPoint);
-        CreateWeapon(1, otherWeaponPoint);
+        CreateWeapon(0, mainWeaponPoint, AssetManager.Instance.GetWeaponSprite("Weapon 3"));
+        CreateWeapon(1, otherWeaponPoint, AssetManager.Instance.GetWeaponSprite("Weapon 4"));
 
         EquipWeapon(currentWeaponIndex);
     }
@@ -77,14 +77,22 @@ public class PlayerController : MonoBehaviour
         weapons[currentWeaponIndex].Shoot();
     }
 
-    private void CreateWeapon(int index, Vector3 localPosition)
+    private void CreateWeapon(int index, Vector3 localPosition, Sprite weaponSprite)
     {
         GameObject weaponObj = Instantiate(weaponPrefab, transform);
         weaponObj.transform.localPosition = localPosition;
+
         if (index != 0)
         {
             weaponObj.transform.rotation = otherWeaponRot;
         }
+
+        SpriteRenderer spriteRenderer = weaponObj.GetComponent<SpriteRenderer>();
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.sprite = weaponSprite;
+        }
+
         weapons[index] = weaponObj.GetComponent<Weapon>();
     }
 
@@ -139,7 +147,8 @@ public class PlayerController : MonoBehaviour
         weapons[currentWeaponIndex].transform.rotation = Quaternion.Euler(0f, 0f, angle);
 
         Vector3 desiredPosition = transform.position + cameraOffset;
-        Vector3 smoothedPosition = Vector3.SmoothDamp(cam.transform.position, desiredPosition, ref velocity, smoothSpeed);
+        Vector3 smoothedPosition =
+            Vector3.SmoothDamp(cam.transform.position, desiredPosition, ref velocity, smoothSpeed);
         cam.transform.position = smoothedPosition;
     }
 
