@@ -34,8 +34,8 @@ public class PlayerController : MonoBehaviour
         currentWeaponIndex = 0;
 
         weapons = new Weapon[2];
-        CreateWeapon(0, mainWeaponPoint, AssetManager.Instance.GetWeaponSprite("Weapon 3"));
-        CreateWeapon(1, otherWeaponPoint, AssetManager.Instance.GetWeaponSprite("Weapon 4"));
+        CreateWeapon(0, mainWeaponPoint, AssetManager.Instance.GetSprite("Weapons", "Weapon 3"));
+        CreateWeapon(1, otherWeaponPoint, AssetManager.Instance.GetSprite("Weapons", "Weapon 4"));
 
         EquipWeapon(currentWeaponIndex);
     }
