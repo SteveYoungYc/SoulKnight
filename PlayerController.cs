@@ -15,8 +15,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 movement;
     private Vector2 mousePos;
     private Vector3 velocity = Vector3.zero;
-
-    public GameObject weaponPrefab;
+    
     private Weapon[] weapons;
     private int currentWeaponIndex;
     private Vector3 mainWeaponPoint;
@@ -34,8 +33,8 @@ public class PlayerController : MonoBehaviour
         currentWeaponIndex = 0;
 
         weapons = new Weapon[2];
-        CreateWeapon(0, mainWeaponPoint, AssetManager.Instance.GetSprite("Weapons", "Weapon 3"));
-        CreateWeapon(1, otherWeaponPoint, AssetManager.Instance.GetSprite("Weapons", "Weapon 4"));
+        weapons[0] = WeaponFactory.Instance.CreateWeapon(WeaponType.Weapon03, transform);
+        weapons[1] = WeaponFactory.Instance.CreateWeapon(WeaponType.Weapon04, transform);
 
         EquipWeapon(currentWeaponIndex);
     }
@@ -75,25 +74,6 @@ public class PlayerController : MonoBehaviour
     private void Shoot()
     {
         weapons[currentWeaponIndex].Shoot();
-    }
-
-    private void CreateWeapon(int index, Vector3 localPosition, Sprite weaponSprite)
-    {
-        GameObject weaponObj = Instantiate(weaponPrefab, transform);
-        weaponObj.transform.localPosition = localPosition;
-
-        if (index != 0)
-        {
-            weaponObj.transform.rotation = otherWeaponRot;
-        }
-
-        SpriteRenderer spriteRenderer = weaponObj.GetComponent<SpriteRenderer>();
-        if (spriteRenderer != null)
-        {
-            spriteRenderer.sprite = weaponSprite;
-        }
-
-        weapons[index] = weaponObj.GetComponent<Weapon>();
     }
 
     private IEnumerator MoveWeapon(Weapon weapon, Vector3 targetPosition, Quaternion targetRotation, float duration)

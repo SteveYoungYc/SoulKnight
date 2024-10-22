@@ -25,6 +25,7 @@ public class AssetManager : MonoBehaviour
     void Start()
     {
         LoadSprites("Weapons");
+        LoadSprites("Bullets");
     }
 
     private void LoadSprites(string category)
