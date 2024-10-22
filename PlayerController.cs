@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
         currentWeaponIndex = 0;
 
         weapons = new Weapon[2];
-        weapons[0] = WeaponFactory.Instance.CreateWeapon(WeaponType.Weapon03, transform);
+        weapons[0] = WeaponFactory.Instance.CreateWeapon(WeaponType.TailWeapon, transform);
         weapons[1] = WeaponFactory.Instance.CreateWeapon(WeaponType.Weapon04, transform);
 
         EquipWeapon(currentWeaponIndex);
@@ -45,16 +45,21 @@ public class PlayerController : MonoBehaviour
         movement.y = Input.GetAxisRaw("Vertical");
         mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
 
-        if (Input.GetMouseButtonDown(0) && !isShooting)
-        {
-            StartShooting();
-        }
+        // if (Input.GetMouseButtonDown(0) && !isShooting)
+        // {
+        //     StartShooting();
+        // }
+        //
+        // if (Input.GetMouseButtonUp(0) && isShooting)
+        // {
+        //     StopShooting();
+        // }
 
-        if (Input.GetMouseButtonUp(0) && isShooting)
+        if (Input.GetMouseButtonDown(0))
         {
-            StopShooting();
+            weapons[currentWeaponIndex].Shoot();
         }
-
+        
         HandleWeaponSwitch();
         HandleZoom();
     }
