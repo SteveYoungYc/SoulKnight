@@ -10,7 +10,7 @@ public abstract class State
 
 public class StateMachine
 {
-    private State currentState;
+    public State currentState;
 
     public void ChangeState(State newState)
     {

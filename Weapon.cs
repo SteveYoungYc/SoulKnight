@@ -7,5 +7,13 @@ public abstract class Weapon : MonoBehaviour
     public float fireRate = 0.1f;
     public bool isShooting;
 
-    public abstract void Shoot();
+    public virtual void StartShoot()
+    {
+        isShooting = true;
+    }
+
+    public virtual void StopShoot()
+    {
+        isShooting = false;
+    }
 }

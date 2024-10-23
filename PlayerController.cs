@@ -22,8 +22,6 @@ public class PlayerController : MonoBehaviour
     private Vector3 otherWeaponPoint;
     private Quaternion otherWeaponRot;
 
-    private bool isShooting = false;
-
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -44,41 +42,19 @@ public class PlayerController : MonoBehaviour
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
         mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
-
-        // if (Input.GetMouseButtonDown(0) && !isShooting)
-        // {
-        //     StartShooting();
-        // }
-        //
-        // if (Input.GetMouseButtonUp(0) && isShooting)
-        // {
-        //     StopShooting();
-        // }
-
+        
         if (Input.GetMouseButtonDown(0))
         {
-            weapons[currentWeaponIndex].Shoot();
+            weapons[currentWeaponIndex].StartShoot();
+        }
+        
+        if (Input.GetMouseButtonUp(0))
+        {
+            weapons[currentWeaponIndex].StopShoot();
         }
         
         HandleWeaponSwitch();
         HandleZoom();
-    }
-
-    private void StartShooting()
-    {
-        isShooting = true;
-        InvokeRepeating(nameof(Shoot), 0f, weapons[currentWeaponIndex].fireRate);
-    }
-
-    private void StopShooting()
-    {
-        isShooting = false;
-        CancelInvoke(nameof(Shoot));
-    }
-
-    private void Shoot()
-    {
-        weapons[currentWeaponIndex].Shoot();
     }
 
     private IEnumerator MoveWeapon(Weapon weapon, Vector3 targetPosition, Quaternion targetRotation, float duration)

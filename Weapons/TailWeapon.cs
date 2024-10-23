@@ -81,8 +81,8 @@ public class TailWeapon : Weapon
         fsm.Update();
     }
     
-    public override void Shoot()
+    public override void StartShoot()
     {
-        isShooting = true;
+        base.StartShoot();
     }
 }
