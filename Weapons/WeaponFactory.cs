@@ -30,8 +30,8 @@ public class WeaponFactory
         }
     }
     
-    private void SetWeaponTransform(Weapon weapon ,GameObject weaponObject, Transform parent, 
-        Sprite weaponSprite, Sprite bulletSprite)
+    private void SetAttribute(Weapon weapon ,GameObject weaponObject, Transform parent, 
+        Sprite weaponSprite, BulletType[] bulletTypes)
     {
         weaponObject.transform.SetParent(parent);
         
@@ -39,7 +39,7 @@ public class WeaponFactory
         spriteRenderer.sprite = weaponSprite;
         spriteRenderer.sortingOrder = 6;
 
-        weapon.bulletSprite = bulletSprite;
+        weapon.bulletTypes = bulletTypes;
     }
 
     // Method to create weapons
@@ -51,24 +51,24 @@ public class WeaponFactory
             {
                 var weapon = new GameObject("Weapon03").AddComponent<BasicGunWeapon>();
                 var weaponSprite = AssetManager.Instance.GetSprite("Weapons", "Weapon 3");
-                var bulletSprite = AssetManager.Instance.GetSprite("Bullets", "Bullet 3");
-                SetWeaponTransform(weapon, weapon.gameObject, parent, weaponSprite, bulletSprite);
+                BulletType[] bulletTypes = new[] { BulletType.Bullet03 };
+                SetAttribute(weapon, weapon.gameObject, parent, weaponSprite, bulletTypes);
                 return weapon;
             }
             case WeaponType.Weapon04:
             {
                 var weapon = new GameObject("Weapon04").AddComponent<BasicGunWeapon>();
                 var weaponSprite = AssetManager.Instance.GetSprite("Weapons", "Weapon 4");
-                var bulletSprite = AssetManager.Instance.GetSprite("Bullets", "Bullet 4");
-                SetWeaponTransform(weapon, weapon.gameObject, parent, weaponSprite, bulletSprite);
+                BulletType[] bulletTypes = new[] { BulletType.Bullet04 };
+                SetAttribute(weapon, weapon.gameObject, parent, weaponSprite, bulletTypes);
                 return weapon;
             }
             case WeaponType.TailWeapon:
             {
                 var weapon = new GameObject("Tail").AddComponent<TailWeapon>();
                 var weaponSprite = AssetManager.Instance.GetSprite("Weapons", "Weapon 0");
-                var bulletSprite = AssetManager.Instance.GetSprite("Bullets", "Bullet 4");
-                SetWeaponTransform(weapon, weapon.gameObject, parent, weaponSprite, bulletSprite);
+                BulletType[] bulletTypes = new[] { BulletType.Bullet04 };
+                SetAttribute(weapon, weapon.gameObject, parent, weaponSprite, bulletTypes);
                 return weapon;
             }
             default:

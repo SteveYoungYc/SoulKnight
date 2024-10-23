@@ -82,28 +82,23 @@ public class BasicGunWeapon : Weapon
 
     public void ShootOneBullet()
     {
-        var transform1 = transform;
-        GameObject bulletPrefab = Resources.Load<GameObject>("Prefabs/Bullet");
-        GameObject bulletGameObject = Instantiate(bulletPrefab, transform1.position, transform1.rotation);
-        bulletGameObject.transform.localScale = new Vector3(1, 1, 1);
-        SpriteRenderer spriteRenderer = bulletGameObject.GetComponent<SpriteRenderer>();
-        spriteRenderer.sprite = bulletSprite;
-        spriteRenderer.sortingOrder = 6;
-        Rigidbody2D bulletRb = bulletGameObject.GetComponent<Rigidbody2D>();
+        Bullet bullet = BulletFactory.Instance.CreateBullet(bulletTypes[0], transform);
+        Rigidbody2D bulletRb = bullet.gameObject.GetComponent<Rigidbody2D>();
         bulletRb.AddForce(transform.right * bulletSpeed, ForceMode2D.Impulse);
-        Bullet bullet = bulletGameObject.GetComponent<Bullet>();
-        bullet.damage = 500;
+        bullet.damage = 50;
     }
 
     public void Start()
     {
-        fireRate = 1f;
+        fireRate = 0.01f;
         bulletSpeed = 20;
         
         fsm = new StateMachine();
         idleState = new GunWeaponIdleState(this);
-        coolState = new GunWeaponCoolState(this);
-        coolState.coolDownTime = fireRate;
+        coolState = new GunWeaponCoolState(this)
+        {
+            coolDownTime = fireRate
+        };
         fsm.ChangeState(idleState);
     }
 
