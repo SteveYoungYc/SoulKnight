@@ -2,6 +2,8 @@
 
 public class Bullet : MonoBehaviour
 {
+    public int damage;
+    
     void OnBecameInvisible()
     {
         Destroy(gameObject);
@@ -14,7 +16,7 @@ public class Bullet : MonoBehaviour
             Enemy enemy = collision.GetComponent<Enemy>();
             if (enemy != null)
             {
-                enemy.TakeDamage(50);
+                enemy.TakeDamage(damage);
                 Destroy(gameObject);
             }
         }
