@@ -14,10 +14,6 @@ public class TailWeaponIdleState : State
         weapon.transform.localScale = Vector3.one;
     }
 
-    public override void Exit()
-    {
-    }
-
     public override void Update()
     {
         if (weapon.isShooting)
@@ -40,10 +36,6 @@ public class TailWeaponBiggerState : State
     public override void Enter()
     {
         count = 0;
-    }
-
-    public override void Exit()
-    {
     }
 
     public override void Update()

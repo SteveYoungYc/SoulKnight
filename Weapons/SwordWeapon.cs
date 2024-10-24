@@ -10,14 +10,6 @@ public class SwordWeaponIdleState : State
         weapon = w;
     }
 
-    public override void Enter()
-    {
-    }
-
-    public override void Exit()
-    {
-    }
-
     public override void Update()
     {
         if (weapon.isShooting)
@@ -42,10 +34,6 @@ public class SwordWeaponCoolState : State
     {
         currentCoolDownTime = coolDownTime;
         weapon.AttackOnce();
-    }
-
-    public override void Exit()
-    {
     }
 
     public override void Update()

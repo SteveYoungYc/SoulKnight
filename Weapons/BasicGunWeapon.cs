@@ -9,14 +9,6 @@ public class GunWeaponIdleState : State
         weapon = w;
     }
 
-    public override void Enter()
-    {
-    }
-
-    public override void Exit()
-    {
-    }
-
     public override void Update()
     {
         if (weapon.isShooting)
@@ -41,10 +33,6 @@ public class GunWeaponCoolState : State
     {
         currentCoolDownTime = coolDownTime;
         weapon.ShootOneBullet();
-    }
-
-    public override void Exit()
-    {
     }
 
     public override void Update()
