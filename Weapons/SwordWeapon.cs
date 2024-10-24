@@ -67,10 +67,16 @@ public class SwordWeapon : Weapon
     public SwordWeaponIdleState idleState;
     public SwordWeaponCoolState coolState;
     public BoxCollider2D boxCollider2D;
+
+    private readonly float quickUpDuration = 0.05f; // Quick upward motion
+    private readonly float swingDownDuration = 0.1f; // Normal speed downward swing (double angle)
+    private readonly float quickBackUpDuration = 0.05f; // Quick return to start position
+    private readonly Vector2 angles = new(-90, 90);
     
     public void Start()
     {
         fireRate = 0.5f;
+        damage = 100;
         isTakeControl = true;
         boxCollider2D = GetComponent<BoxCollider2D>();
         if (boxCollider2D == null)
@@ -103,26 +109,19 @@ public class SwordWeapon : Weapon
     
     public void AttackOnce()
     {
-        // Start the swinging coroutine for a smooth animation
-        float swingAngle = 90f;
-        StartCoroutine(SwingSword(swingAngle));
+        StartCoroutine(SwingSword());
     }
 
-    private IEnumerator SwingSword(float swingAngle)
+    private IEnumerator SwingSword()
     {
         // Capture the initial rotation
         Quaternion startRotation = transform.rotation;
 
         // Calculate intermediate rotations
-        Quaternion quickUpRotation = Quaternion.Euler(0, 0, 90); // Quick upward
-        Quaternion swingDownRotation = Quaternion.Euler(0, 0, -90); // Swing down (past start)
+        Quaternion quickUpRotation = Quaternion.Euler(0, 0, angles.y); // Quick upward
+        Quaternion swingDownRotation = Quaternion.Euler(0, 0, angles.x); // Swing down (past start)
         Quaternion backToStartRotation = startRotation; // Return to original position
-
-        // Durations for each phase
-        float quickUpDuration = 0.05f; // Quick upward motion
-        float swingDownDuration = 0.1f; // Normal speed downward swing (double angle)
-        float quickBackUpDuration = 0.05f; // Quick return to start position
-
+        
         float elapsedTime = 0f;
 
         // 1. Quick upward rotation by swingAngle
@@ -167,7 +166,7 @@ public class SwordWeapon : Weapon
             Enemy enemy = collision.GetComponent<Enemy>();
             if (enemy != null)
             {
-                enemy.TakeDamage(500);
+                enemy.TakeDamage(damage);
             }
         }
     }

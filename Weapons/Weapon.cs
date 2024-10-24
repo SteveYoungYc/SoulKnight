@@ -3,12 +3,13 @@ using UnityEngine;
 
 public abstract class Weapon : MonoBehaviour
 {
+    public bool isShooting;
+    public bool isTakeControl;
     public float bulletSpeed = 10f;
     public float fireRate = 1f;
-    public bool isShooting;
-    public BulletType[] bulletTypes;
-    public bool isTakeControl;
+    public int damage;
     public WeaponType type;
+    public BulletType[] bulletTypes;
 
     public virtual void StartShoot()
     {

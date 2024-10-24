@@ -45,7 +45,7 @@ public class BulletFactory
         SpriteRenderer spriteRenderer = bullet.gameObject.GetComponent<SpriteRenderer>();
         CircleCollider2D circleCollider = bullet.gameObject.GetComponent<CircleCollider2D>();
         spriteRenderer.sprite = bulletSprite;
-        spriteRenderer.sortingOrder = 6;
+        spriteRenderer.sortingOrder = 3;
 
         Vector3 offset = parent.TransformDirection(new Vector3(spriteRenderer.bounds.extents.x, 0, 0));
         bullet.gameObject.transform.position = parent.position + offset * parent.localScale.x;
