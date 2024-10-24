@@ -53,6 +53,7 @@ public class TailWeaponBiggerState : State
             count++;
             var transform = weapon.transform;
             transform.localScale += new Vector3(0.5f, 0.02f, 0);
+            weapon.ShootOneBullet();
             if (count == 10)
             {
                 weapon.fsm.ChangeState(weapon.idleState);
@@ -84,5 +85,18 @@ public class TailWeapon : Weapon
     public override void StartShoot()
     {
         base.StartShoot();
+    }
+    
+    public void ShootOneBullet()
+    {
+        Bullet bullet = BulletFactory.Instance.CreateBullet(bulletTypes[0], transform);
+        Rigidbody2D bulletRb = bullet.gameObject.GetComponent<Rigidbody2D>();
+        bulletRb.AddForce(transform.right * bulletSpeed, ForceMode2D.Impulse);
+        bullet.damage = 500;
+    }
+
+    public void AttackOnce()
+    {
+        
     }
 }

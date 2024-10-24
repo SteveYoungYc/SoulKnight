@@ -90,7 +90,7 @@ public class BasicGunWeapon : Weapon
 
     public void Start()
     {
-        fireRate = 0.01f;
+        fireRate = 0.1f;
         bulletSpeed = 20;
         
         fsm = new StateMachine();

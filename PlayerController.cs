@@ -25,13 +25,13 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        mainWeaponPoint = new Vector3(0.3f, -0.2f, 0);
+        mainWeaponPoint = new Vector3(0.1f, -0.2f, 0);
         otherWeaponPoint = new Vector3(-0.2f, -0.35f, 0);
         otherWeaponRot = Quaternion.Euler(0f, 0f, -35f);
         currentWeaponIndex = 0;
 
         weapons = new Weapon[2];
-        weapons[0] = WeaponFactory.Instance.CreateWeapon(WeaponType.TailWeapon, transform);
+        weapons[0] = WeaponFactory.Instance.CreateWeapon(WeaponType.SwordWeapon, transform);
         weapons[1] = WeaponFactory.Instance.CreateWeapon(WeaponType.Weapon04, transform);
 
         EquipWeapon(currentWeaponIndex);
@@ -77,12 +77,26 @@ public class PlayerController : MonoBehaviour
 
     private void EquipWeapon(int weaponIndex)
     {
-        foreach (Weapon weapon in weapons)
+        for (int i = 0; i < weapons.Length; i++)
         {
-            StartCoroutine(MoveWeapon(weapon, otherWeaponPoint, otherWeaponRot, 0.3f));
+            if (i == weaponIndex)
+                continue;
+            StartCoroutine(MoveWeapon(weapons[i], otherWeaponPoint, otherWeaponRot, 0.3f));
         }
 
-        StartCoroutine(MoveWeapon(weapons[weaponIndex], mainWeaponPoint, Quaternion.identity, 0.3f));
+        Quaternion targetQuaternion;
+        if (weapons[weaponIndex].type == WeaponType.SwordWeapon)
+        {
+            targetQuaternion = Quaternion.Euler(0, 0, 60);
+        }
+        else
+        {
+            // TODO: make it smoother
+            // Vector2 lookDir = mousePos - (Vector2)mainWeaponPoint;
+            // targetQuaternion = Quaternion.Euler(0f, 0f, Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg);
+            targetQuaternion = Quaternion.identity;
+        }
+        StartCoroutine(MoveWeapon(weapons[weaponIndex], mainWeaponPoint, targetQuaternion, 0.2f));
     }
 
     private void HandleWeaponSwitch()
@@ -103,9 +117,12 @@ public class PlayerController : MonoBehaviour
     {
         rb.MovePosition(rb.position + movement * (moveSpeed * Time.fixedDeltaTime));
 
-        Vector2 lookDir = mousePos - (Vector2)weapons[currentWeaponIndex].transform.position;
-        float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
-        weapons[currentWeaponIndex].transform.rotation = Quaternion.Euler(0f, 0f, angle);
+        if (!weapons[currentWeaponIndex].isTakeControl)
+        {
+            Vector2 lookDir = mousePos - (Vector2)weapons[currentWeaponIndex].transform.position;
+            float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
+            weapons[currentWeaponIndex].transform.rotation = Quaternion.Euler(0f, 0f, angle);
+        }
 
         Vector3 desiredPosition = transform.position + cameraOffset;
         Vector3 smoothedPosition =

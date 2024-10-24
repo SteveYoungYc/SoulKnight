@@ -7,6 +7,8 @@ public abstract class Weapon : MonoBehaviour
     public float fireRate = 1f;
     public bool isShooting;
     public BulletType[] bulletTypes;
+    public bool isTakeControl;
+    public WeaponType type;
 
     public virtual void StartShoot()
     {
