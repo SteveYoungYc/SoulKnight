@@ -56,6 +56,7 @@ public class SwordWeapon : Weapon
     public SwordWeaponCoolState coolState;
     public BoxCollider2D boxCollider2D;
 
+    private bool isAttacking;
     private readonly float quickUpDuration = 0.05f; // Quick upward motion
     private readonly float swingDownDuration = 0.1f; // Normal speed downward swing (double angle)
     private readonly float quickBackUpDuration = 0.05f; // Quick return to start position
@@ -64,7 +65,7 @@ public class SwordWeapon : Weapon
     public void Start()
     {
         fireRate = 0.5f;
-        damage = 100;
+        damage = 1000;
         isTakeControl = true;
         boxCollider2D = GetComponent<BoxCollider2D>();
         if (boxCollider2D == null)
@@ -124,7 +125,7 @@ public class SwordWeapon : Weapon
 
         // 2. Normal speed downward swing by swingAngle * 2 (relative to current position)
         elapsedTime = 0f;
-        boxCollider2D.isTrigger = true;
+        isAttacking = true;
         while (elapsedTime < swingDownDuration)
         {
             transform.rotation = Quaternion.Lerp(quickUpRotation, swingDownRotation, elapsedTime / swingDownDuration);
@@ -133,7 +134,7 @@ public class SwordWeapon : Weapon
         }
         // Ensure it reaches the exact target
         transform.rotation = swingDownRotation;
-        boxCollider2D.isTrigger = false;
+        isAttacking = false;
 
         // 3. Quick return to starting position by swingAngle
         elapsedTime = 0f;
@@ -149,6 +150,10 @@ public class SwordWeapon : Weapon
     
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (!isAttacking)
+        {
+            return;
+        }
         if (collision.CompareTag("Enemy"))
         {
             Enemy enemy = collision.GetComponent<Enemy>();

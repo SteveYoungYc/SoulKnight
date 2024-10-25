@@ -43,6 +43,7 @@ public class WeaponFactory
 
         BoxCollider2D boxCollider2D = weaponObject.AddComponent<BoxCollider2D>();
         boxCollider2D.size = spriteRenderer.sprite.bounds.size;
+        boxCollider2D.isTrigger = true;
     }
 
     // Method to create weapons
