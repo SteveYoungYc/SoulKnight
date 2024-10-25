@@ -32,7 +32,7 @@ public class WeaponFactory
     }
     
     private void SetAttribute(Weapon weapon ,GameObject weaponObject, Transform parent, 
-        Sprite weaponSprite, BulletType[] bulletTypes)
+        Vector3 gunPointPosition, Sprite weaponSprite, BulletType[] bulletTypes)
     {
         weaponObject.transform.SetParent(parent);
         weapon.bulletTypes = bulletTypes;
@@ -44,49 +44,59 @@ public class WeaponFactory
         BoxCollider2D boxCollider2D = weaponObject.AddComponent<BoxCollider2D>();
         boxCollider2D.size = spriteRenderer.sprite.bounds.size;
         boxCollider2D.isTrigger = true;
+        
+        GameObject gunPointObj = new GameObject("GunPoint");
+        gunPointObj.transform.SetParent(weaponObject.transform);
+        gunPointObj.transform.localPosition = gunPointPosition;
+        weapon.gunPoint = gunPointObj.transform;
     }
 
     // Method to create weapons
     public Weapon CreateWeapon(WeaponType type, Transform parent)
     {
         Weapon weapon;
+        Sprite weaponSprite;
+        BulletType[] bulletTypes;
+        Vector3 gunPointPosition;
         switch (type)
         {
             case WeaponType.Weapon03:
             {
                 weapon = new GameObject("Weapon03").AddComponent<BasicGunWeapon>();
-                var weaponSprite = AssetManager.Instance.GetSprite("Weapons", "Weapon 3");
-                BulletType[] bulletTypes = new[] { BulletType.BulletTail };
-                SetAttribute(weapon, weapon.gameObject, parent, weaponSprite, bulletTypes);
+                weaponSprite = AssetManager.Instance.GetSprite("Weapons", "Weapon 3");
+                bulletTypes = new[] { BulletType.BulletTail };
+                gunPointPosition = Vector3.up;
                 break;
             }
             case WeaponType.Weapon04:
             {
                 weapon = new GameObject("Weapon04").AddComponent<BasicGunWeapon>();
-                var weaponSprite = AssetManager.Instance.GetSprite("Weapons", "Gatling");
-                BulletType[] bulletTypes = new[] { BulletType.Bullet04 };
-                SetAttribute(weapon, weapon.gameObject, parent, weaponSprite, bulletTypes);
+                weaponSprite = AssetManager.Instance.GetSprite("Weapons", "Gatling");
+                bulletTypes = new[] { BulletType.Bullet04 };
+                gunPointPosition = new Vector3(1.5f, 0.05f, 0);
                 break;
             }
             case WeaponType.TailWeapon:
             {
                 weapon = new GameObject("TailWeapon").AddComponent<TailWeapon>();
-                var weaponSprite = AssetManager.Instance.GetSprite("Weapons", "Knife");
-                BulletType[] bulletTypes = new[] { BulletType.BulletTail };
-                SetAttribute(weapon, weapon.gameObject, parent, weaponSprite, bulletTypes);
+                weaponSprite = AssetManager.Instance.GetSprite("Weapons", "Knife");
+                bulletTypes = new[] { BulletType.BulletTail };
+                gunPointPosition = Vector3.up;
                 break;
             }
             case WeaponType.SwordWeapon:
             {
                 weapon = new GameObject("SwordWeapon").AddComponent<SwordWeapon>();
-                var weaponSprite = AssetManager.Instance.GetSprite("Weapons", "Knife");
-                SetAttribute(weapon, weapon.gameObject, parent, weaponSprite, null);
+                weaponSprite = AssetManager.Instance.GetSprite("Weapons", "Knife");
+                bulletTypes = null;
+                gunPointPosition = Vector3.up;
                 break;
             }
             default:
                 throw new ArgumentException("Invalid weapon type.");
         }
         weapon.type = type;
+        SetAttribute(weapon, weapon.gameObject, parent, gunPointPosition, weaponSprite, bulletTypes);
         return weapon;
     }
 }

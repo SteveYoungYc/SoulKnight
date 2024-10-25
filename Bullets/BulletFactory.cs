@@ -35,7 +35,6 @@ public class BulletFactory
     {
         GameObject bulletPrefab = Resources.Load<GameObject>(path);
         GameObject bulletGameObject = Object.Instantiate(bulletPrefab);
-        bulletGameObject.transform.localScale = new Vector3(1, 1, 1);
         return bulletGameObject;
     }
 

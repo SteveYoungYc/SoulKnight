@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public abstract class Weapon : MonoBehaviour
 {
@@ -10,6 +9,7 @@ public abstract class Weapon : MonoBehaviour
     public int damage;
     public WeaponType type;
     public BulletType[] bulletTypes;
+    public Transform gunPoint;
 
     public virtual void StartShoot()
     {
