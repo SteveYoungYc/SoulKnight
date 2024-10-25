@@ -52,6 +52,15 @@ public class PlayerController : MonoBehaviour
         
         HandleWeaponSwitch();
         HandleZoom();
+        HandleWeaponAim();
+    }
+    
+    void FixedUpdate()
+    {
+        rb.MovePosition(rb.position + movement * (moveSpeed * Time.fixedDeltaTime));
+        Vector3 desiredPosition = transform.position + cameraOffset;
+        Vector3 smoothedPosition = Vector3.SmoothDamp(cam.transform.position, desiredPosition, ref velocity, smoothSpeed);
+        cam.transform.position = smoothedPosition;
     }
 
     private void FastMoveWeapon(Weapon weapon, Vector3 targetPosition, Quaternion targetRotation)
@@ -97,9 +106,6 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            // TODO: make it smoother
-            // Vector2 lookDir = mousePos - (Vector2)mainWeaponPoint;
-            // targetQuaternion = Quaternion.Euler(0f, 0f, Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg);
             targetQuaternion = Quaternion.identity;
         }
         FastMoveWeapon(weapons[weaponIndex], mainWeaponPoint, targetQuaternion);
@@ -121,13 +127,19 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void FixedUpdate()
+    void HandleZoom()
     {
-        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        float scrollData = Input.GetAxis("Mouse ScrollWheel");
+        cam.orthographicSize -= scrollData * zoomSpeed;
+        cam.orthographicSize = Mathf.Clamp(cam.orthographicSize, minZoom, maxZoom);
+    }
+
+    void HandleWeaponAim()
+    {
+        Vector3 mousePosition = cam.ScreenToWorldPoint(Input.mousePosition);
         bool isFacingLeft = mousePosition.x < transform.position.x;
         weapons[currentWeaponIndex].isFacingLeft = isFacingLeft;
         transform.localScale = new Vector3(isFacingLeft ? -1 : 1, 1, 1);
-        rb.MovePosition(rb.position + movement * (moveSpeed * Time.fixedDeltaTime));
         
         if (!weapons[currentWeaponIndex].isTakeControl)
         {
@@ -135,16 +147,5 @@ public class PlayerController : MonoBehaviour
             float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
             weapons[currentWeaponIndex].transform.rotation = Quaternion.Euler(0f, 0f, isFacingLeft ? angle - 180 : angle);
         }
-
-        Vector3 desiredPosition = transform.position + cameraOffset;
-        Vector3 smoothedPosition = Vector3.SmoothDamp(cam.transform.position, desiredPosition, ref velocity, smoothSpeed);
-        cam.transform.position = smoothedPosition;
-    }
-
-    void HandleZoom()
-    {
-        float scrollData = Input.GetAxis("Mouse ScrollWheel");
-        cam.orthographicSize -= scrollData * zoomSpeed;
-        cam.orthographicSize = Mathf.Clamp(cam.orthographicSize, minZoom, maxZoom);
     }
 }
