@@ -5,6 +5,7 @@ public abstract class Weapon : MonoBehaviour
     public bool isActive;
     public bool isShooting;
     public bool isTakeControl;
+    public bool isFacingLeft;
     public float bulletSpeed = 10f;
     public float fireRate = 1f;
     public int damage;
@@ -12,6 +13,7 @@ public abstract class Weapon : MonoBehaviour
     public BulletType[] bulletTypes;
     public Transform gunPoint;
     public BoxCollider2D boxCollider2D;
+    public SpriteRenderer SpriteRenderer;
     public StateMachine fsm;
     public IdleState idleState;
 

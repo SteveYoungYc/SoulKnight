@@ -40,7 +40,8 @@ public class WeaponFactory
         
         SpriteRenderer spriteRenderer = weaponObject.AddComponent<SpriteRenderer>();
         spriteRenderer.sprite = weaponSprite;
-        spriteRenderer.sortingOrder = 6;
+        spriteRenderer.sortingOrder = 7;
+        weapon.SpriteRenderer = spriteRenderer;
 
         BoxCollider2D boxCollider2D = weaponObject.AddComponent<BoxCollider2D>();
         boxCollider2D.size = spriteRenderer.sprite.bounds.size;

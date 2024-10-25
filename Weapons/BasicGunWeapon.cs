@@ -80,7 +80,7 @@ public class BasicGunWeapon : Weapon
         Bullet bullet = BulletFactory.Instance.CreateBullet(bulletTypes[0], transform);
         bullet.transform.position = gunPoint.transform.position;
         Rigidbody2D bulletRb = bullet.gameObject.GetComponent<Rigidbody2D>();
-        bulletRb.AddForce(transform.right * bulletSpeed, ForceMode2D.Impulse);
+        bulletRb.AddForce((isFacingLeft ? -transform.right : transform.right) * bulletSpeed, ForceMode2D.Impulse);
         bullet.damage = 50;
     }
 }

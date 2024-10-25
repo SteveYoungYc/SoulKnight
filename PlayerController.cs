@@ -84,6 +84,7 @@ public class PlayerController : MonoBehaviour
         for (int i = 0; i < weapons.Length; i++)
         {
             weapons[i].isActive = false;
+            weapons[i].SpriteRenderer.sortingOrder = 2;
             if (i == weaponIndex)
                 continue;
             FastMoveWeapon(weapons[i], otherWeaponPoint, otherWeaponRot);
@@ -103,6 +104,7 @@ public class PlayerController : MonoBehaviour
         }
         FastMoveWeapon(weapons[weaponIndex], mainWeaponPoint, targetQuaternion);
         weapons[weaponIndex].isActive = true;
+        weapons[weaponIndex].SpriteRenderer.sortingOrder = 7;
     }
 
     private void HandleWeaponSwitch()
@@ -121,18 +123,21 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        bool isFacingLeft = mousePosition.x < transform.position.x;
+        weapons[currentWeaponIndex].isFacingLeft = isFacingLeft;
+        transform.localScale = new Vector3(isFacingLeft ? -1 : 1, 1, 1);
         rb.MovePosition(rb.position + movement * (moveSpeed * Time.fixedDeltaTime));
-
+        
         if (!weapons[currentWeaponIndex].isTakeControl)
         {
-            Vector2 lookDir = mousePos - (Vector2)weapons[currentWeaponIndex].transform.position;
+            Vector2 lookDir = (Vector2)mousePosition - (Vector2)weapons[currentWeaponIndex].transform.position;
             float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
-            weapons[currentWeaponIndex].transform.rotation = Quaternion.Euler(0f, 0f, angle);
+            weapons[currentWeaponIndex].transform.rotation = Quaternion.Euler(0f, 0f, isFacingLeft ? angle - 180 : angle);
         }
 
         Vector3 desiredPosition = transform.position + cameraOffset;
-        Vector3 smoothedPosition =
-            Vector3.SmoothDamp(cam.transform.position, desiredPosition, ref velocity, smoothSpeed);
+        Vector3 smoothedPosition = Vector3.SmoothDamp(cam.transform.position, desiredPosition, ref velocity, smoothSpeed);
         cam.transform.position = smoothedPosition;
     }
 
