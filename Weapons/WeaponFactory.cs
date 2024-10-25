@@ -45,6 +45,7 @@ public class WeaponFactory
         BoxCollider2D boxCollider2D = weaponObject.AddComponent<BoxCollider2D>();
         boxCollider2D.size = spriteRenderer.sprite.bounds.size;
         boxCollider2D.isTrigger = true;
+        weapon.boxCollider2D = boxCollider2D;
         
         GameObject gunPointObj = new GameObject("GunPoint");
         gunPointObj.transform.SetParent(weaponObject.transform);
@@ -55,6 +56,7 @@ public class WeaponFactory
     // Method to create weapons
     public Weapon CreateWeapon(WeaponType type, Transform parent)
     {
+        GameObject weaponObject = new GameObject(type.ToString());
         Weapon weapon;
         Sprite weaponSprite;
         BulletType[] bulletTypes;
@@ -63,21 +65,21 @@ public class WeaponFactory
         {
             case WeaponType.Weapon03:
             {
-                weapon = new GameObject("Weapon03").AddComponent<BasicGunWeapon>();
+                weapon = weaponObject.AddComponent<BasicGunWeapon>();
                 weaponSprite = AssetManager.Instance.GetSprite("Weapons", "Weapon 3");
                 bulletTypes = new[] { BulletType.Bullet03 };
                 break;
             }
             case WeaponType.Weapon04:
             {
-                weapon = new GameObject("Weapon04").AddComponent<BasicGunWeapon>();
+                weapon = weaponObject.AddComponent<BasicGunWeapon>();
                 weaponSprite = AssetManager.Instance.GetSprite("Weapons", "Weapon 4");
                 bulletTypes = new[] { BulletType.Bullet04 };
                 break;
             }
             case WeaponType.Gatling:
             {
-                weapon = new GameObject("WeaponGatling").AddComponent<BasicGunWeapon>();
+                weapon = weaponObject.AddComponent<BasicGunWeapon>();
                 weaponSprite = AssetManager.Instance.GetSprite("Weapons", "Gatling");
                 bulletTypes = new[] { BulletType.Gatling };
                 gunPointPosition = new Vector3(1.5f, 0.05f, 0);
@@ -85,14 +87,14 @@ public class WeaponFactory
             }
             case WeaponType.Tail:
             {
-                weapon = new GameObject("WeaponTail").AddComponent<TailWeapon>();
+                weapon = weaponObject.AddComponent<TailWeapon>();
                 weaponSprite = AssetManager.Instance.GetSprite("Weapons", "Knife");
                 bulletTypes = new[] { BulletType.Tail };
                 break;
             }
             case WeaponType.Sword:
             {
-                weapon = new GameObject("SwordWeapon").AddComponent<SwordWeapon>();
+                weapon = weaponObject.AddComponent<SwordWeapon>();
                 weaponSprite = AssetManager.Instance.GetSprite("Weapons", "Knife");
                 bulletTypes = null;
                 break;
@@ -101,7 +103,7 @@ public class WeaponFactory
                 throw new ArgumentException("Invalid weapon type.");
         }
         weapon.type = type;
-        SetAttribute(weapon, weapon.gameObject, parent, gunPointPosition, weaponSprite, bulletTypes);
+        SetAttribute(weapon, weaponObject, parent, gunPointPosition, weaponSprite, bulletTypes);
         return weapon;
     }
 }

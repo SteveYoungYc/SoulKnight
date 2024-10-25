@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class TailWeaponIdleState : State
+public class TailWeaponIdleState : IdleState
 {
     private readonly TailWeapon weapon;
 
@@ -57,26 +57,14 @@ public class TailWeaponBiggerState : State
 
 public class TailWeapon : Weapon
 {
-    public StateMachine fsm;
-    public TailWeaponIdleState idleState;
     public TailWeaponBiggerState biggerState;
 
-    public void Start()
+    public new void Awake()
     {
-        fsm = new StateMachine();
+        base.Awake();
         idleState = new TailWeaponIdleState(this);
         biggerState = new TailWeaponBiggerState(this);
         fsm.ChangeState(idleState);
-    }
-    
-    public void Update()
-    {
-        fsm.Update();
-    }
-    
-    public override void StartShoot()
-    {
-        base.StartShoot();
     }
     
     public void ShootOneBullet()

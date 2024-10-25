@@ -7,6 +7,9 @@ public abstract class State
     public virtual void Update() {}
 }
 
+public class IdleState : State
+{
+}
 
 public class StateMachine
 {

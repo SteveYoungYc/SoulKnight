@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class GunWeaponIdleState : State
+public class GunWeaponIdleState : IdleState
 {
     private readonly BasicGunWeapon weapon;
 
@@ -50,9 +50,21 @@ public class GunWeaponCoolState : State
 
 public class BasicGunWeapon : Weapon
 {
-    public StateMachine fsm;
-    public GunWeaponIdleState idleState;
     public GunWeaponCoolState coolState;
+    
+    public new void Awake()
+    {
+        base.Awake();
+        fireRate = 0.1f;
+        bulletSpeed = 20;
+
+        idleState = new GunWeaponIdleState(this);
+        coolState = new GunWeaponCoolState(this)
+        {
+            coolDownTime = fireRate
+        };
+        fsm.ChangeState(idleState);
+    }
     
     public override void StartShoot()
     {
@@ -63,11 +75,6 @@ public class BasicGunWeapon : Weapon
         }
     }
 
-    public override void StopShoot()
-    {
-        base.StopShoot();
-    }
-
     public void ShootOneBullet()
     {
         Bullet bullet = BulletFactory.Instance.CreateBullet(bulletTypes[0], transform);
@@ -75,24 +82,5 @@ public class BasicGunWeapon : Weapon
         Rigidbody2D bulletRb = bullet.gameObject.GetComponent<Rigidbody2D>();
         bulletRb.AddForce(transform.right * bulletSpeed, ForceMode2D.Impulse);
         bullet.damage = 50;
-    }
-
-    public void Start()
-    {
-        fireRate = 0.1f;
-        bulletSpeed = 20;
-        
-        fsm = new StateMachine();
-        idleState = new GunWeaponIdleState(this);
-        coolState = new GunWeaponCoolState(this)
-        {
-            coolDownTime = fireRate
-        };
-        fsm.ChangeState(idleState);
-    }
-
-    public void Update()
-    {
-        fsm.Update();
     }
 }

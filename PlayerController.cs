@@ -18,16 +18,13 @@ public class PlayerController : MonoBehaviour
     
     private Weapon[] weapons;
     private int currentWeaponIndex;
-    private Vector3 mainWeaponPoint;
-    private Vector3 otherWeaponPoint;
-    private Quaternion otherWeaponRot;
+    private static readonly Vector3 mainWeaponPoint = new (0.1f, -0.2f, 0);
+    private static readonly Vector3 otherWeaponPoint = new (-0.2f, -0.35f, 0);
+    private static readonly Quaternion otherWeaponRot = Quaternion.Euler(0f, 0f, -35f);
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        mainWeaponPoint = new Vector3(0.1f, -0.2f, 0);
-        otherWeaponPoint = new Vector3(-0.2f, -0.35f, 0);
-        otherWeaponRot = Quaternion.Euler(0f, 0f, -35f);
         currentWeaponIndex = 0;
 
         weapons = new Weapon[2];
@@ -57,6 +54,13 @@ public class PlayerController : MonoBehaviour
         HandleZoom();
     }
 
+    private void FastMoveWeapon(Weapon weapon, Vector3 targetPosition, Quaternion targetRotation)
+    {
+        var _transform = weapon.transform;
+        _transform.localPosition = targetPosition;
+        _transform.localRotation = targetRotation;
+    }
+
     private IEnumerator MoveWeapon(Weapon weapon, Vector3 targetPosition, Quaternion targetRotation, float duration)
     {
         Vector3 initialPosition = weapon.transform.localPosition;
@@ -79,9 +83,10 @@ public class PlayerController : MonoBehaviour
     {
         for (int i = 0; i < weapons.Length; i++)
         {
+            weapons[i].isActive = false;
             if (i == weaponIndex)
                 continue;
-            StartCoroutine(MoveWeapon(weapons[i], otherWeaponPoint, otherWeaponRot, 0.3f));
+            FastMoveWeapon(weapons[i], otherWeaponPoint, otherWeaponRot);
         }
 
         Quaternion targetQuaternion;
@@ -96,7 +101,8 @@ public class PlayerController : MonoBehaviour
             // targetQuaternion = Quaternion.Euler(0f, 0f, Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg);
             targetQuaternion = Quaternion.identity;
         }
-        StartCoroutine(MoveWeapon(weapons[weaponIndex], mainWeaponPoint, targetQuaternion, 0.2f));
+        FastMoveWeapon(weapons[weaponIndex], mainWeaponPoint, targetQuaternion);
+        weapons[weaponIndex].isActive = true;
     }
 
     private void HandleWeaponSwitch()

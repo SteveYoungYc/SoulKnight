@@ -1,13 +1,18 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class SwordWeaponIdleState : State
+public class SwordWeaponIdleState : IdleState
 {
     private readonly SwordWeapon weapon;
 
     public SwordWeaponIdleState(SwordWeapon w)
     {
         weapon = w;
+    }
+    
+    public override void Enter()
+    {
+        weapon.StopAttack();
     }
 
     public override void Update()
@@ -38,7 +43,7 @@ public class SwordWeaponCoolState : State
 
     public override void Update()
     {
-        if (currentCoolDownTime > 0)
+        if (weapon.isActive && currentCoolDownTime > 0)
         {
             currentCoolDownTime -= Time.deltaTime;
         }
@@ -51,10 +56,7 @@ public class SwordWeaponCoolState : State
 
 public class SwordWeapon : Weapon
 {
-    public StateMachine fsm;
-    public SwordWeaponIdleState idleState;
     public SwordWeaponCoolState coolState;
-    public BoxCollider2D boxCollider2D;
 
     private bool isAttacking;
     private readonly float quickUpDuration = 0.05f; // Quick upward motion
@@ -62,29 +64,20 @@ public class SwordWeapon : Weapon
     private readonly float quickBackUpDuration = 0.05f; // Quick return to start position
     private readonly Vector2 angles = new(-90, 90);
     
-    public void Start()
+    private Coroutine attackCoroutine;
+    
+    public new void Awake()
     {
+        base.Awake();
         fireRate = 0.5f;
-        damage = 1000;
+        damage = 250;
         isTakeControl = true;
-        boxCollider2D = GetComponent<BoxCollider2D>();
-        if (boxCollider2D == null)
-        {
-            Debug.LogError("BoxCollider2D not found!");
-        }
-        
-        fsm = new StateMachine();
         idleState = new SwordWeaponIdleState(this);
         coolState = new SwordWeaponCoolState(this)
         {
             coolDownTime = fireRate
         };
         fsm.ChangeState(idleState);
-    }
-
-    public void Update()
-    {
-        fsm.Update();
     }
     
     public override void StartShoot()
@@ -98,7 +91,16 @@ public class SwordWeapon : Weapon
     
     public void AttackOnce()
     {
-        StartCoroutine(SwingSword());
+        attackCoroutine = StartCoroutine(SwingSword());
+    }
+    
+    public void StopAttack()
+    {
+        if (attackCoroutine != null)
+        {
+            StopCoroutine(attackCoroutine);
+            attackCoroutine = null;
+        }
     }
 
     private IEnumerator SwingSword()

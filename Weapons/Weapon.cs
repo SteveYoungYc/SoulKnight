@@ -2,6 +2,7 @@
 
 public abstract class Weapon : MonoBehaviour
 {
+    public bool isActive;
     public bool isShooting;
     public bool isTakeControl;
     public float bulletSpeed = 10f;
@@ -10,6 +11,22 @@ public abstract class Weapon : MonoBehaviour
     public WeaponType type;
     public BulletType[] bulletTypes;
     public Transform gunPoint;
+    public BoxCollider2D boxCollider2D;
+    public StateMachine fsm;
+    public IdleState idleState;
+
+    public void Awake()
+    {
+        fsm = new StateMachine();
+    }
+
+    public void Update()
+    {
+        if (isActive)
+        {
+            fsm.Update();
+        }
+    }
 
     public virtual void StartShoot()
     {
