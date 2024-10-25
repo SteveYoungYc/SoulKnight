@@ -89,7 +89,7 @@ public class WeaponFactory
             case WeaponType.Tail:
             {
                 weapon = weaponObject.AddComponent<TailWeapon>();
-                weaponSprite = AssetManager.Instance.GetSprite("Weapons", "Knife");
+                weaponSprite = AssetManager.Instance.GetSprite("Weapons", "WeaponTail_0");
                 bulletTypes = new[] { BulletType.Tail };
                 break;
             }

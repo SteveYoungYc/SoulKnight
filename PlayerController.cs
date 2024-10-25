@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour
 
         weapons = new Weapon[2];
         weapons[0] = WeaponFactory.Instance.CreateWeapon(WeaponType.Gatling, transform);
-        weapons[1] = WeaponFactory.Instance.CreateWeapon(WeaponType.Sword, transform);
+        weapons[1] = WeaponFactory.Instance.CreateWeapon(WeaponType.Tail, transform);
 
         EquipWeapon(currentWeaponIndex);
     }
