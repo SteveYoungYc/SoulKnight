@@ -31,8 +31,8 @@ public class PlayerController : MonoBehaviour
         currentWeaponIndex = 0;
 
         weapons = new Weapon[2];
-        weapons[0] = WeaponFactory.Instance.CreateWeapon(WeaponType.SwordWeapon, transform);
-        weapons[1] = WeaponFactory.Instance.CreateWeapon(WeaponType.Weapon04, transform);
+        weapons[0] = WeaponFactory.Instance.CreateWeapon(WeaponType.Gatling, transform);
+        weapons[1] = WeaponFactory.Instance.CreateWeapon(WeaponType.Sword, transform);
 
         EquipWeapon(currentWeaponIndex);
     }
@@ -85,7 +85,7 @@ public class PlayerController : MonoBehaviour
         }
 
         Quaternion targetQuaternion;
-        if (weapons[weaponIndex].type == WeaponType.SwordWeapon)
+        if (weapons[weaponIndex].type == WeaponType.Sword)
         {
             targetQuaternion = Quaternion.Euler(0, 0, 60);
         }

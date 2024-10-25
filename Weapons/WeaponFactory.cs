@@ -5,8 +5,9 @@ public enum WeaponType
 {
     Weapon03,
     Weapon04,
-    TailWeapon,
-    SwordWeapon
+    Gatling,
+    Tail,
+    Sword
 }
 
 public class WeaponFactory
@@ -57,39 +58,43 @@ public class WeaponFactory
         Weapon weapon;
         Sprite weaponSprite;
         BulletType[] bulletTypes;
-        Vector3 gunPointPosition;
+        Vector3 gunPointPosition = Vector3.zero;
         switch (type)
         {
             case WeaponType.Weapon03:
             {
                 weapon = new GameObject("Weapon03").AddComponent<BasicGunWeapon>();
                 weaponSprite = AssetManager.Instance.GetSprite("Weapons", "Weapon 3");
-                bulletTypes = new[] { BulletType.BulletTail };
-                gunPointPosition = Vector3.up;
+                bulletTypes = new[] { BulletType.Bullet03 };
                 break;
             }
             case WeaponType.Weapon04:
             {
                 weapon = new GameObject("Weapon04").AddComponent<BasicGunWeapon>();
-                weaponSprite = AssetManager.Instance.GetSprite("Weapons", "Gatling");
+                weaponSprite = AssetManager.Instance.GetSprite("Weapons", "Weapon 4");
                 bulletTypes = new[] { BulletType.Bullet04 };
+                break;
+            }
+            case WeaponType.Gatling:
+            {
+                weapon = new GameObject("WeaponGatling").AddComponent<BasicGunWeapon>();
+                weaponSprite = AssetManager.Instance.GetSprite("Weapons", "Gatling");
+                bulletTypes = new[] { BulletType.Gatling };
                 gunPointPosition = new Vector3(1.5f, 0.05f, 0);
                 break;
             }
-            case WeaponType.TailWeapon:
+            case WeaponType.Tail:
             {
-                weapon = new GameObject("TailWeapon").AddComponent<TailWeapon>();
+                weapon = new GameObject("WeaponTail").AddComponent<TailWeapon>();
                 weaponSprite = AssetManager.Instance.GetSprite("Weapons", "Knife");
-                bulletTypes = new[] { BulletType.BulletTail };
-                gunPointPosition = Vector3.up;
+                bulletTypes = new[] { BulletType.Tail };
                 break;
             }
-            case WeaponType.SwordWeapon:
+            case WeaponType.Sword:
             {
                 weapon = new GameObject("SwordWeapon").AddComponent<SwordWeapon>();
                 weaponSprite = AssetManager.Instance.GetSprite("Weapons", "Knife");
                 bulletTypes = null;
-                gunPointPosition = Vector3.up;
                 break;
             }
             default:

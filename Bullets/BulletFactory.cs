@@ -6,7 +6,8 @@ public enum BulletType
 {
     Bullet03,
     Bullet04,
-    BulletTail
+    Gatling,
+    Tail,
 }
 
 public class BulletFactory
@@ -56,28 +57,35 @@ public class BulletFactory
     
     public Bullet CreateBullet(BulletType type, Transform parent)
     {
+        Bullet bullet = CreateBulletGameObject("Prefabs/Bullet").GetComponent<Bullet>();;
+        Sprite bulletSprite;
         switch (type)
         {
             case BulletType.Bullet03:
             {
-                Bullet bullet = CreateBulletGameObject("Prefabs/Bullet").GetComponent<Bullet>();
-                SetAttribute(bullet, parent, AssetManager.Instance.GetSprite("Bullets", "Bullet 3"));
-                return bullet;
+                bulletSprite = AssetManager.Instance.GetSprite("Bullets", "Bullet 3");
+                break;
             }
             case BulletType.Bullet04:
             {
-                Bullet bullet = CreateBulletGameObject("Prefabs/Bullet").GetComponent<Bullet>();
-                SetAttribute(bullet, parent, AssetManager.Instance.GetSprite("Bullets", "Bullet 4"));
-                return bullet;
+                bulletSprite = AssetManager.Instance.GetSprite("Bullets", "Bullet 4");
+                break;
             }
-            case BulletType.BulletTail:
+            case BulletType.Gatling:
             {
-                Bullet bullet = CreateBulletGameObject("Prefabs/Bullet").GetComponent<Bullet>();
-                SetAttribute(bullet, parent, AssetManager.Instance.GetSprite("Bullets", "All_Fire_Bullet_Pixel_16x16_02_395"));
-                return bullet;
+                bullet.transform.localScale = new Vector3(0.3f, 0.3f, 1);
+                bulletSprite = AssetManager.Instance.GetSprite("Bullets", "BulletGatling");
+                break;
+            }
+            case BulletType.Tail:
+            {
+                bulletSprite = AssetManager.Instance.GetSprite("Bullets", "All_Fire_Bullet_Pixel_16x16_02_395");
+                break;
             }
             default:
                 throw new ArgumentException("Invalid weapon type.");
         }
+        SetAttribute(bullet, parent, bulletSprite);
+        return bullet;
     }
 }
