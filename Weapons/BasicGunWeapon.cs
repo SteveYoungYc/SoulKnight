@@ -32,7 +32,7 @@ public class GunWeaponCoolState : State
     public override void Enter()
     {
         currentCoolDownTime = coolDownTime;
-        weapon.ShootOneBullet();
+        weapon.ShootOneBullet(0, 100, 20, Vector2.zero);
     }
 
     public override void Update()
@@ -56,7 +56,6 @@ public class BasicGunWeapon : Weapon
     {
         base.Awake();
         fireRate = 0.1f;
-        bulletSpeed = 20;
 
         idleState = new GunWeaponIdleState(this);
         coolState = new GunWeaponCoolState(this)
@@ -73,14 +72,5 @@ public class BasicGunWeapon : Weapon
         {
             fsm.ChangeState(coolState);
         }
-    }
-
-    public void ShootOneBullet()
-    {
-        Bullet bullet = BulletFactory.Instance.CreateBullet(bulletTypes[0], transform);
-        bullet.transform.position = gunPoint.transform.position;
-        Rigidbody2D bulletRb = bullet.gameObject.GetComponent<Rigidbody2D>();
-        bulletRb.AddForce((isFacingLeft ? -transform.right : transform.right) * bulletSpeed, ForceMode2D.Impulse);
-        bullet.damage = 50;
     }
 }

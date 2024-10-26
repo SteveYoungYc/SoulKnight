@@ -52,7 +52,7 @@ public class TailWeaponChargingState : State
             weapon.chargingPercentage += 0.002f;
             var transform = weapon.transform;
             
-            transform.localScale += new Vector3(0.003f, 0.0015f, 0);
+            transform.localScale += new Vector3(0.003f, 0.002f, 0);
             
             float shakeAmount = 0.01f;
             float shakeFrequency = 10f;
@@ -63,7 +63,7 @@ public class TailWeaponChargingState : State
             coolTime += Time.deltaTime;
             if (coolTime >= 0.1f)
             {
-                weapon.ShootOneBullet1();
+                weapon.ShootLubricant();
                 coolTime = 0;
             }
             
@@ -135,23 +135,18 @@ public class TailWeapon : Weapon
             fsm.ChangeState(chargingState);
         }
     }
-    
-    public void ShootOneBullet0(Vector2 direction)
+
+    public void ShootTadpole(Vector2 direction)
     {
-        Bullet bullet = BulletFactory.Instance.CreateBullet(bulletTypes[0], transform);
+        int bulletDamage = (int)(100 * (1 + 4 * chargingPercentage));
+        Bullet bullet = base.ShootOneBullet(0, bulletDamage, 6, direction);
         bullet.transform.localScale = new Vector3(0.5f, 0.5f, 0);
-        Rigidbody2D bulletRb = bullet.gameObject.GetComponent<Rigidbody2D>();
-        bulletRb.AddForce(direction * bulletSpeed / 3, ForceMode2D.Impulse);
-        bullet.damage = (int)(100 * (1 + 4 * chargingPercentage));
     }
     
-    public void ShootOneBullet1()
+    public void ShootLubricant()
     {
-        Bullet bullet = BulletFactory.Instance.CreateBullet(bulletTypes[1], transform);
+        Bullet bullet = base.ShootOneBullet(1, 80, 20, Vector2.zero);
         bullet.transform.localScale = new Vector3(0.2f, 0.2f, 0);
-        Rigidbody2D bulletRb = bullet.gameObject.GetComponent<Rigidbody2D>();
-        bulletRb.AddForce((isFacingLeft ? -transform.right : transform.right) * bulletSpeed, ForceMode2D.Impulse);
-        bullet.damage = 80;
     }
     
     private IEnumerator ShootMultipleTimes(int shootCount)
@@ -162,8 +157,8 @@ public class TailWeapon : Weapon
             yield return new WaitForSeconds(0.1f);
         }
     }
-    
-    public void StartShootMultipleBullets()
+
+    private void StartShootMultipleBullets()
     {
         int bulletNum = (int)(1 + 4 * chargingPercentage);
         Vector2 direction = isFacingLeft ? -transform.right : transform.right;
@@ -174,7 +169,7 @@ public class TailWeapon : Weapon
         {
             float angleOffset = startAngle + i * 5f;
             Vector2 offsetDirection = Quaternion.Euler(0, 0, angleOffset) * direction;
-            ShootOneBullet0(offsetDirection);
+            ShootTadpole(offsetDirection);
         }
     }
 

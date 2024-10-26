@@ -6,7 +6,6 @@ public abstract class Weapon : MonoBehaviour
     public bool isShooting;
     public bool isTakeControl;
     public bool isFacingLeft;
-    public float bulletSpeed = 10f;
     public float fireRate = 1f;
     public int damage;
     public WeaponType type;
@@ -38,5 +37,18 @@ public abstract class Weapon : MonoBehaviour
     public virtual void StopShoot()
     {
         isShooting = false;
+    }
+
+    public virtual Bullet ShootOneBullet(int bulletIdx, int bulletDamage, int bulletSpeed, Vector2 direction)
+    {
+        if (direction == Vector2.zero)
+        {
+            direction = isFacingLeft ? -transform.right : transform.right;
+        }
+        Bullet bullet = BulletFactory.Instance.CreateBullet(bulletTypes[bulletIdx], transform);
+        bullet.transform.position = gunPoint.transform.position;
+        bullet.rb2d.AddForce(direction * bulletSpeed, ForceMode2D.Impulse);
+        bullet.damage = bulletDamage;
+        return bullet;
     }
 }

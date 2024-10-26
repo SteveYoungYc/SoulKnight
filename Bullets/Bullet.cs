@@ -3,6 +3,7 @@
 public class Bullet : MonoBehaviour
 {
     public int damage;
+    public Rigidbody2D rb2d;
     
     void OnBecameInvisible()
     {
