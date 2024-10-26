@@ -7,7 +7,8 @@ public enum BulletType
     Bullet03,
     Bullet04,
     Gatling,
-    Tail,
+    Tail0,
+    Tail1
 }
 
 public class BulletFactory
@@ -77,9 +78,14 @@ public class BulletFactory
                 bulletSprite = AssetManager.Instance.GetSprite("Bullets", "BulletGatling");
                 break;
             }
-            case BulletType.Tail:
+            case BulletType.Tail0:
             {
-                bulletSprite = AssetManager.Instance.GetSprite("Bullets", "All_Fire_Bullet_Pixel_16x16_02_395");
+                bulletSprite = AssetManager.Instance.GetSprite("Bullets", "Tail0");
+                break;
+            }
+            case BulletType.Tail1:
+            {
+                bulletSprite = AssetManager.Instance.GetSprite("Bullets", "Tail1");
                 break;
             }
             default:
