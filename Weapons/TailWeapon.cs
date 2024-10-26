@@ -27,7 +27,8 @@ public class TailWeaponIdleState : IdleState
 public class TailWeaponChargingState : State
 {
     private readonly TailWeapon weapon;
-    private float coolTime = 0;
+    private Vector2 originalPosition;
+    private float coolTime;
 
     public TailWeaponChargingState(TailWeapon w)
     {
@@ -37,12 +38,15 @@ public class TailWeaponChargingState : State
     public override void Enter()
     {
         weapon.chargingPercentage = 0;
+        originalPosition = weapon.transform.localPosition;
     }
 
     public override void Exit()
     {
         weapon.GetHigh();
-        weapon.transform.localScale = Vector3.one;
+        var transform = weapon.transform;
+        transform.localScale = Vector3.one;
+        transform.localPosition = originalPosition;
     }
 
     public override void Update()
