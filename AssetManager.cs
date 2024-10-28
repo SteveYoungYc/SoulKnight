@@ -6,22 +6,6 @@ public class AssetManager : MonoBehaviour
     private Dictionary<string, Sprite> weaponSprites;
     private Dictionary<string, Dictionary<string, Sprite>> sprites;
 
-    public static AssetManager Instance { get; private set; }
-
-    void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
-    }
-
     void Start()
     {
         LoadSprites("Weapons");

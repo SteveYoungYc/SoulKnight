@@ -8,8 +8,7 @@ public class Turret : MonoBehaviour
 
     public void Start()
     {
-        GameObject enemySpawnerObj = GameObject.Find("EnemySpawner");
-        enemySpawner = enemySpawnerObj.GetComponent<EnemySpawner>();
+        enemySpawner = GameManager.enemySpawner;
         if (enemySpawner == null)
         {
             Debug.LogError("enemySpawner is null!");

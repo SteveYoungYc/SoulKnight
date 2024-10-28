@@ -4,13 +4,14 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     public GameObject enemyPrefab;
-    public float spawnInterval = 2f;
+    public float spawnInterval = 1f;
     public int maxEnemies = 10;
     public List<GameObject> enemies;
     public int generated;
 
     private void Start()
     {
+        enemyPrefab = Resources.Load<GameObject>("Prefabs/Enemy");
         enemies = new List<GameObject>();
     }
 

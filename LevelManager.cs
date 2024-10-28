@@ -12,11 +12,7 @@ public class LevelManager : MonoBehaviour
     
     void Start()
     {
-        if (enemySpawner == null)
-        {
-            enemySpawner = FindObjectOfType<EnemySpawner>();
-        }
-
+        enemySpawner = GameManager.enemySpawner;
         if (enemySpawner != null)
         {
             StartCoroutine(StartNextLevel());

@@ -63,28 +63,28 @@ public class BulletFactory
         {
             case BulletType.Bullet03:
             {
-                bulletSprite = AssetManager.Instance.GetSprite("Bullets", "Bullet 3");
+                bulletSprite = GameManager.assetManager.GetSprite("Bullets", "Bullet 3");
                 break;
             }
             case BulletType.Bullet04:
             {
-                bulletSprite = AssetManager.Instance.GetSprite("Bullets", "Bullet 4");
+                bulletSprite = GameManager.assetManager.GetSprite("Bullets", "Bullet 4");
                 break;
             }
             case BulletType.Gatling:
             {
                 bullet.transform.localScale = new Vector3(0.3f, 0.3f, 1);
-                bulletSprite = AssetManager.Instance.GetSprite("Bullets", "BulletGatling");
+                bulletSprite = GameManager.assetManager.GetSprite("Bullets", "BulletGatling");
                 break;
             }
             case BulletType.Tail0:
             {
-                bulletSprite = AssetManager.Instance.GetSprite("Bullets", "Tail0");
+                bulletSprite = GameManager.assetManager.GetSprite("Bullets", "Tail0");
                 break;
             }
             case BulletType.Tail1:
             {
-                bulletSprite = AssetManager.Instance.GetSprite("Bullets", "Tail1");
+                bulletSprite = GameManager.assetManager.GetSprite("Bullets", "Tail1");
                 break;
             }
             default:

@@ -67,21 +67,21 @@ public class WeaponFactory
             case WeaponType.Weapon03:
             {
                 weapon = weaponObject.AddComponent<BasicGunWeapon>();
-                weaponSprite = AssetManager.Instance.GetSprite("Weapons", "Weapon 3");
+                weaponSprite = GameManager.assetManager.GetSprite("Weapons", "Weapon 3");
                 bulletTypes = new[] { BulletType.Bullet03 };
                 break;
             }
             case WeaponType.Weapon04:
             {
                 weapon = weaponObject.AddComponent<BasicGunWeapon>();
-                weaponSprite = AssetManager.Instance.GetSprite("Weapons", "Weapon 4");
+                weaponSprite = GameManager.assetManager.GetSprite("Weapons", "Weapon 4");
                 bulletTypes = new[] { BulletType.Bullet04 };
                 break;
             }
             case WeaponType.Gatling:
             {
                 weapon = weaponObject.AddComponent<BasicGunWeapon>();
-                weaponSprite = AssetManager.Instance.GetSprite("Weapons", "Gatling");
+                weaponSprite = GameManager.assetManager.GetSprite("Weapons", "Gatling");
                 bulletTypes = new[] { BulletType.Gatling };
                 gunPointPosition = new Vector3(1.5f, 0.05f, 0);
                 break;
@@ -89,7 +89,7 @@ public class WeaponFactory
             case WeaponType.Tail:
             {
                 weapon = weaponObject.AddComponent<TailWeapon>();
-                weaponSprite = AssetManager.Instance.GetSprite("Weapons", "WeaponTail_0");
+                weaponSprite = GameManager.assetManager.GetSprite("Weapons", "WeaponTail_0");
                 bulletTypes = new[] { BulletType.Tail0, BulletType.Tail1 };
                 gunPointPosition = new Vector3(0.5f, 0, 0);
                 break;
@@ -97,7 +97,7 @@ public class WeaponFactory
             case WeaponType.Sword:
             {
                 weapon = weaponObject.AddComponent<SwordWeapon>();
-                weaponSprite = AssetManager.Instance.GetSprite("Weapons", "Knife");
+                weaponSprite = GameManager.assetManager.GetSprite("Weapons", "Knife");
                 bulletTypes = null;
                 break;
             }
