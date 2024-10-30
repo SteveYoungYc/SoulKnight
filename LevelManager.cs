@@ -1,83 +1,70 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
+
+public class PrepareState : State
+{
+    private float interval;
+    
+    public override void Enter()
+    {
+        GameManager.mode = GameMode.Prepare;
+        interval = GameManager.levelManager.levelInterval;
+    }
+
+    public override void Update()
+    {
+        interval -= Time.deltaTime;
+        if (interval <= 0)
+        {
+            GameManager.levelManager.fsm.ChangeState(GameManager.levelManager.fightState);
+        }
+    }
+}
+
+public class FightState : State
+{
+    public override void Enter()
+    {
+        GameManager.mode = GameMode.Fight;
+        Debug.Log("Level " + GameManager.levelManager.currentLevel + " has started!");
+        GameManager.enemySpawner.StartSpawnEnemy();
+    }
+
+    public override void Exit()
+    {
+        Debug.Log("Level " + GameManager.levelManager.currentLevel + " has ended!");
+        GameManager.levelManager.currentLevel++;
+    }
+    
+    public override void Update()
+    {
+        if (GameManager.enemySpawner.isFinished())
+        {
+            GameManager.levelManager.fsm.ChangeState(GameManager.levelManager.prepareState);
+        }
+    }
+}
 
 public class LevelManager : MonoBehaviour
 {
-    public EnemySpawner enemySpawner;
+    public int currentLevel = 1;
+    public readonly float levelInterval = 5f;
+    
     public Text countdownText;
+    public StateMachine fsm;
+    public PrepareState prepareState;
+    public FightState fightState;
     
-    private int currentLevel = 1;
-    private float levelInterval = 2f;
-    
-    void Start()
+    public void Start()
     {
-        enemySpawner = GameManager.enemySpawner;
-        if (enemySpawner != null)
-        {
-            StartCoroutine(StartNextLevel());
-        }
-        else
-        {
-            Debug.LogError("EnemySpawner not found or not assigned!");
-        }
+        prepareState = new PrepareState();
+        fightState = new FightState();
+        fsm = new StateMachine();
+        fsm.ChangeState(prepareState);
     }
-    
-    private IEnumerator StartNextLevel()
-    {
-        while (true)
-        {
-            OnLevelStart();
-            
-            while (enemySpawner.enemies.Count == 0)
-            {
-                yield return null;
-            }
-            
-            while (enemySpawner.enemies.Count > 0)
-            {
-                yield return null;
-            }
-            
-            OnLevelEnd();
-            currentLevel++;
-            
-            float countdown = levelInterval;
-            while (countdown > 0)
-            {
-                if (countdownText != null)
-                {
-                    countdownText.text = "Next Level in: " + countdown.ToString("F0") + "s";
-                }
-                yield return new WaitForSeconds(1f);
-                countdown--;
-            }
 
-            if (countdownText != null)
-            {
-                countdownText.text = "";
-            }
-        }
-    }
-    
-    private void OnLevelStart()
+    public void Update()
     {
-        Debug.Log("Level " + currentLevel + " has started!");
-        enemySpawner.Init();
-        InvokeRepeating(nameof(InvokeSpawnEnemy), 0f, enemySpawner.spawnInterval);
-    }
-    
-    private void InvokeSpawnEnemy()
-    {
-        enemySpawner.SpawnEnemy();
-        if (enemySpawner.generated >= enemySpawner.maxEnemies)
-        {
-            CancelInvoke(nameof(InvokeSpawnEnemy));
-        }
-    }
-    
-    private void OnLevelEnd()
-    {
-        Debug.Log("Level " + currentLevel + " has ended!");
+        fsm.Update();
     }
 }

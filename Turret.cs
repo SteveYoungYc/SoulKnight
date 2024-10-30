@@ -14,7 +14,7 @@ public class Turret : MonoBehaviour
             Debug.LogError("enemySpawner is null!");
         }
 
-        weapon = WeaponFactory.Instance.CreateWeapon(WeaponType.Tail, transform);
+        weapon = WeaponFactory.Instance.CreateWeapon(WeaponType.Gatling, transform);
         weapon.transform.localPosition = Vector3.zero;
         weapon.isActive = true;
     }

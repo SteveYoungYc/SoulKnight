@@ -4,7 +4,6 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     private readonly float moveSpeed = 5f;
-    public Camera cam;
     public Vector3 cameraOffset;
     public float smoothSpeed = 0.125f;
     public float zoomSpeed = 2f;
@@ -38,7 +37,7 @@ public class PlayerController : MonoBehaviour
     {
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
-        mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
+        mousePos = GameManager.cameraMain.ScreenToWorldPoint(Input.mousePosition);
         
         if (Input.GetMouseButtonDown(0))
         {
@@ -59,8 +58,8 @@ public class PlayerController : MonoBehaviour
     {
         rb.MovePosition(rb.position + movement * (moveSpeed * Time.fixedDeltaTime));
         Vector3 desiredPosition = transform.position + cameraOffset;
-        Vector3 smoothedPosition = Vector3.SmoothDamp(cam.transform.position, desiredPosition, ref velocity, smoothSpeed);
-        cam.transform.position = smoothedPosition;
+        Vector3 smoothedPosition = Vector3.SmoothDamp(GameManager.cameraMain.transform.position, desiredPosition, ref velocity, smoothSpeed);
+        GameManager.cameraMain.transform.position = smoothedPosition;
     }
 
     private void FastMoveWeapon(Weapon weapon, Vector3 targetPosition, Quaternion targetRotation)
@@ -130,13 +129,13 @@ public class PlayerController : MonoBehaviour
     void HandleZoom()
     {
         float scrollData = Input.GetAxis("Mouse ScrollWheel");
-        cam.orthographicSize -= scrollData * zoomSpeed;
-        cam.orthographicSize = Mathf.Clamp(cam.orthographicSize, minZoom, maxZoom);
+        GameManager.cameraMain.orthographicSize -= scrollData * zoomSpeed;
+        GameManager.cameraMain.orthographicSize = Mathf.Clamp(GameManager.cameraMain.orthographicSize, minZoom, maxZoom);
     }
 
     void HandleWeaponAim()
     {
-        Vector3 mousePosition = cam.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 mousePosition = GameManager.cameraMain.ScreenToWorldPoint(Input.mousePosition);
         bool isFacingLeft = mousePosition.x < transform.position.x;
         weapons[currentWeaponIndex].isFacingLeft = isFacingLeft;
         transform.localScale = new Vector3(isFacingLeft ? -1 : 1, 1, 1);
