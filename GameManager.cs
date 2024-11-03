@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     public static AssetManager assetManager;
     public static EnemySpawner enemySpawner;
     public static LevelManager levelManager;
+    public static UIManager uiManager;
 
     private void Awake()
     {
@@ -28,5 +29,6 @@ public class GameManager : MonoBehaviour
         assetManager = gameObject.AddComponent<AssetManager>();
         enemySpawner = gameObject.AddComponent<EnemySpawner>();
         levelManager = gameObject.AddComponent<LevelManager>();
+        uiManager = gameObject.AddComponent<UIManager>();
     }
 }

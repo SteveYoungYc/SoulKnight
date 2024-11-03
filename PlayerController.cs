@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
     public float zoomSpeed = 2f;
     public float minZoom = 5f;
     public float maxZoom = 20f;
+    public int health;
+    public int maxHealth = 100;
 
     private Rigidbody2D rb;
     private Vector2 movement;
@@ -31,6 +33,8 @@ public class PlayerController : MonoBehaviour
         weapons[1] = WeaponFactory.Instance.CreateWeapon(WeaponType.Tail, transform);
 
         EquipWeapon(currentWeaponIndex);
+
+        health = maxHealth;
     }
 
     void Update()
