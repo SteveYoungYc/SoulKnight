@@ -57,7 +57,7 @@ public class BulletFactory
     
     public Bullet CreateBullet(BulletType type, Transform parent)
     {
-        Bullet bullet = CreateBulletGameObject("Prefabs/Bullet").GetComponent<Bullet>();;
+        Bullet bullet = CreateBulletGameObject("Prefabs/Bullet").GetComponent<Bullet>();
         Sprite bulletSprite;
         switch (type)
         {

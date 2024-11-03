@@ -4,7 +4,6 @@ using Random = UnityEngine.Random;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public GameObject enemyPrefab;
     public float spawnInterval = 1f;
     public int maxEnemies = 5;
     public List<GameObject> enemies;
@@ -14,7 +13,6 @@ public class EnemySpawner : MonoBehaviour
 
     private void Start()
     {
-        enemyPrefab = Resources.Load<GameObject>("Prefabs/Enemy");
         enemies = new List<GameObject>();
         startSpawn = false;
         interval = 0f;
@@ -43,11 +41,11 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnEnemy()
     {
-        Vector2 spawnPosition = new Vector2(10f, Random.Range(-3f, 3f));
-        GameObject newEnemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
-        enemies.Add(newEnemy);
+        Enemy enemy = EnemyFactory.Instance.CreateEnemy(EnemyType.Enemy03);
+        enemy.transform.position = new Vector2(10f, Random.Range(-3f, 3f));
+        enemies.Add(enemy.gameObject);
         generated++;
-        newEnemy.GetComponent<Enemy>().OnEnemyDestroyed += () => HandleEnemyDestroyed(newEnemy);
+        enemy.OnEnemyDestroyed += () => HandleEnemyDestroyed(enemy.gameObject);
     }
 
     private void HandleEnemyDestroyed(GameObject enemy)
